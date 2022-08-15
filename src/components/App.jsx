@@ -4,10 +4,17 @@ import SearchBar from './Searchbar';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { ThreeDots  } from 'react-loader-spinner';
 import { Container } from "./App.stylede";
+import ImageGallery from './ImageGallery';
 
 
 class App extends Component {
   state={
+    imageName:'',
+    imageArr:[
+      {}, 
+      {}, 
+      {}, 
+    ],
     BASE_URL: 'https://pixabay.com/api/',
     query:{
       q:null,
@@ -20,26 +27,28 @@ class App extends Component {
     loading:false,
     image:null
   }
-  componentDidMount(){
-    // const {BASE_URL, query:{page, perpage, id, webformatURL, largeImageURL}}= this.state;
-    // `${BASE_URL}?${page}&${perpage}& ${id}&${webformatURL}&${largeImageURL}`
-    this.setState({loading:true});
-    setTimeout(()=> {
+  // componentDidMount(){
+  //   // const {BASE_URL, query:{page, perpage, id, webformatURL, largeImageURL}}= this.state;
+  //   // `${BASE_URL}?${page}&${perpage}& ${id}&${webformatURL}&${largeImageURL}`
+  //   this.setState({loading:true});
+  //   setTimeout(()=> {
 
-      fetch('https://pixabay.com/api/?q=cat&page=1&key=27990741-9fab199c60b940a6a95dff2fa&image_type=photo&orientation=horizontal&per_page=12')
-      .then(res=> res.json)
-      .then(image=> this.setState({image}))
-      .finally(()=> this.setState({loading:false}))
-    }, 2000)
-
-  }
+  //     fetch('https://pixabay.com/api/?q=cat&page=1&key=27990741-9fab199c60b940a6a95dff2fa&image_type=photo&orientation=horizontal&per_page=12')
+  //     .then(res=> res.json)
+  //     .then(image=> {
+  //       console.log(image);
+  //       this.setState({image})
+  //     })
+  //     .finally(()=> this.setState({loading:false}))
+  //   }, 2000)
+  // }
 
   showValidationMessage = (message) => {
     Notify.warning(message);
 }
 
   onSubmitHandler= ({imageName})=> {
-      console.log(imageName);
+      this.setState({imageName})
   }
   render(){
     return (
@@ -48,7 +57,8 @@ class App extends Component {
         <SearchBar onSubmit={this.onSubmitHandler} onValidation = {this.showValidationMessage}></SearchBar>
         {/* <ImageGallery></ImageGallery> */}
         {this.state.loading && <ThreeDots color="#00BFFF" height={80} width={80} />}
-        {this.state.image && <div>{'React homework template'}</div>}
+        <ImageGallery imageName={this.state.imageName}></ImageGallery>
+        {/* {this.state.image && <div>{'React homework template'}</div>} */}
             </Container>
     );
   }
@@ -62,3 +72,4 @@ export default App;
 // largeImageUR
 // page -1
 // perpage-12
+// cardImages={}

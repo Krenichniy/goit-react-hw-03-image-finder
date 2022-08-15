@@ -22,7 +22,7 @@ class SearchBar extends Component {
         event.preventDefault();
         
         const { imageName } = this.state;
-        if (!imageName ) return showMessage('Please fill this field');
+        if (!imageName.trim() ) return showMessage('Please fill this field');
 
         const isExist = callback({ imageName });
 
