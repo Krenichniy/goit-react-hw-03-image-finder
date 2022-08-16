@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import PropTypes from 'prop-types';
-// import {Container, Header,FormContainer, LabelContainer, UserInput, StyledBtn } from './Form.styled';
+import { StyledHeader, StyledForm, FormContainer, StyledInput, StyledBtn } from './Searchbar.styled';
 
 class SearchBar extends Component {
     state = {
@@ -37,23 +37,24 @@ class SearchBar extends Component {
         // const { name, tel } = this.state;
         const { onSubmit, onValidation } = this.props;
         return (
-        <header >
-            <form  onSubmit={(event)=> this.handleSubmit(event,onSubmit, onValidation)}>
-                <button type="submit"  >
-                <FiSearch style={{marginRight:8}}/>
-                <span >Search</span>
-                </button>
-                <input
-                onChange={this.handleImageChange}
-                type="text"
-                name = 'name'
-                value={this.state.imageName}
-                autoComplete={'off'}
-                autoFocus
-                placeholder="Search images and photos"
-                />
-            </form>
-        </header>
+        <StyledHeader >
+                <StyledForm onSubmit={(event) => this.handleSubmit(event, onSubmit, onValidation)}>
+                    <FormContainer>
+                            <StyledBtn type="submit"  >
+                            <FiSearch style={{marginRight:8}}/>
+                            </StyledBtn>
+                            <StyledInput
+                            onChange={this.handleImageChange}
+                            type="text"
+                            name = 'name'
+                            value={this.state.imageName}
+                            autoComplete={'off'}
+                            autoFocus
+                            placeholder="Search images and photos"
+                                    />
+                    </FormContainer>
+            </StyledForm>
+        </StyledHeader>
         )
     }
 }
