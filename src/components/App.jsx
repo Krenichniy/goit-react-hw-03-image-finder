@@ -5,6 +5,7 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { ThreeDots  } from 'react-loader-spinner';
 import { Container } from "./App.stylede";
 import ImageGallery from './ImageGallery';
+import Button from './Button';
 
 
 class App extends Component {
@@ -25,7 +26,8 @@ class App extends Component {
       largeImageURL: null
     }, 
     loading:false,
-    image:null
+    image: null, 
+    showBtn:false
   }
   // componentDidMount(){
   //   // const {BASE_URL, query:{page, perpage, id, webformatURL, largeImageURL}}= this.state;
@@ -45,7 +47,14 @@ class App extends Component {
 
   showValidationMessage = (message) => {
     Notify.warning(message);
-}
+  }
+  increasePage() {
+    console.log('hello mthfck')
+  }
+  //  increasePage = async () => {
+  //   await this.setState(prevState => ({ page: prevState.page + 1 }))
+  //   this.getImgs();
+  // }
 
   onSubmitHandler= ({imageName})=> {
       this.setState({imageName})
@@ -58,6 +67,7 @@ class App extends Component {
         {/* <ImageGallery></ImageGallery> */}
         {this.state.loading && <ThreeDots color="#00BFFF" height={80} width={80} />}
         <ImageGallery imageName={this.state.imageName}></ImageGallery>
+        {this.state.showBtn && <Button onClick={this.increasePage} />}
         {/* {this.state.image && <div>{'React homework template'}</div>} */}
             </Container>
     );
