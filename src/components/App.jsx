@@ -27,7 +27,6 @@ class App extends Component {
   }
 
   async componentDidUpdate(prevprops, prevstate, snapshot) {
-    document.addEventListener('keyup', this.closeImageModal)
     if (prevstate.loading) {
       this.setState({loading:false})
     }
