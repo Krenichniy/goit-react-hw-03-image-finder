@@ -1,7 +1,7 @@
 const { default: styled } = require('styled-components');
 
 export const StyledGalleryItem = styled.li`
-        flex-basis: calc((100% / 5) - 30px);
+        width:260px;
         margin-right: 30px;
         margin-bottom: 30px;
         border: 1px solid grey;
@@ -17,7 +17,7 @@ export const StyledGalleryItem = styled.li`
 `
 export const StyledImage = styled.img`
         width: 100%;
-        height: 100%;
+        height: 260px;
         object-fit: cover;
         vertical-align: middle;
         border-style: none;

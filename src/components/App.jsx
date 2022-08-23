@@ -2,74 +2,88 @@ import React, { Component } from 'react';
 import SearchBar from './Searchbar';
 // import ImageGallery from './ImageGallery';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { ThreeDots  } from 'react-loader-spinner';
 import { Container } from "./App.stylede";
 import ImageGallery from './ImageGallery';
 import Button from './Button';
-
+import Modal from './Modal';
+import Loader from './Loader';
+import {FetchImagesFromApi} from './FetchData/FetchData'
+const PAGE = 1;
 
 class App extends Component {
-  state={
+  state = {
+    data:[],
     imageName:'',
-    imageArr:[
-      {}, 
-      {}, 
-      {}, 
-    ],
-    BASE_URL: 'https://pixabay.com/api/',
-    query:{
-      q:null,
-      page:1,
-      perpage:12,
-      id:1,
-      webformatURL: null,
-      largeImageURL: null
-    }, 
     loading:false,
-    image: null, 
-    showBtn:false
+    showBtn: false, 
+    pageNumber: 1,
+    urlForModalPicture: '',
+    isModalOpen: false,
   }
-  // componentDidMount(){
-  //   // const {BASE_URL, query:{page, perpage, id, webformatURL, largeImageURL}}= this.state;
-  //   // `${BASE_URL}?${page}&${perpage}& ${id}&${webformatURL}&${largeImageURL}`
-  //   this.setState({loading:true});
-  //   setTimeout(()=> {
 
-  //     fetch('https://pixabay.com/api/?q=cat&page=1&key=27990741-9fab199c60b940a6a95dff2fa&image_type=photo&orientation=horizontal&per_page=12')
-  //     .then(res=> res.json)
-  //     .then(image=> {
-  //       console.log(image);
-  //       this.setState({image})
-  //     })
-  //     .finally(()=> this.setState({loading:false}))
-  //   }, 2000)
-  // }
+  getSnapshotBeforeUpdate() {
+    const { offsetHeight } = document.querySelector('header');
+    return window.innerHeight - offsetHeight * 2;
+  }
+
+  async componentDidUpdate(prevprops, prevstate, snapshot) {
+    document.addEventListener('keyup', this.closeImageModal)
+    if (prevstate.loading) {
+      this.setState({loading:false})
+    }
+
+        if (this.state.page > 1) {
+         window.scrollBy({
+        top: snapshot,
+        behavior: 'smooth',
+      });
+   }
+}
 
   showValidationMessage = (message) => {
     Notify.warning(message);
   }
-  increasePage() {
-    console.log('hello mthfck')
-  }
-  //  increasePage = async () => {
-  //   await this.setState(prevState => ({ page: prevState.page + 1 }))
-  //   this.getImgs();
-  // }
 
-  onSubmitHandler= ({imageName})=> {
-      this.setState({imageName})
+  onSubmitHandler = async ({ imageName }) => {
+    this.setState({ loading: true })
+    const response = await FetchImagesFromApi(PAGE, imageName);
+    if(response.hits.length === 0) Notify.warning('No matches for such request');
+    this.setState({ data: response.hits, imageName, pageNumber: this.state.pageNumber, showBtn: this.state.pageNumber < Math.ceil(response.total / 12) })
+    this.setState({ loading: false })
   }
-  render(){
+  
+  increasePage = async () => {
+    const { pageNumber, imageName } = this.state;
+    this.setState(PrevState => {
+      return { pageNumber: PrevState.pageNumber + 1 }
+    });
+    this.setState({ pageNumber: this.state.pageNumber + 1, loading:true});
+    const response = await FetchImagesFromApi(pageNumber + 1, imageName);
+    this.setState({ data: [...this.state.data, ...response.hits], showBtn: this.state.pageNumber < Math.ceil(response.total / 12) });
+    console.log(this.state.data)
+  }
+
+  openImageModal=(image)=> {
+    this.setState({ isModalOpen: true, urlForModalPicture: image });
+    document.documentElement.style.overflow = "hidden"
+  }
+    closeImageModal = (e) => {
+    this.setState({ isModalOpen: false, urlForModalPicture:'' });
+    document.documentElement.style.overflow = null
+    
+  }
+
+  
+  render() {
+    const { loading, data,  showBtn, isModalOpen, urlForModalPicture } = this.state;
     return (
       <Container>
-        
-        <SearchBar onSubmit={this.onSubmitHandler} onValidation = {this.showValidationMessage}></SearchBar>
-        {/* <ImageGallery></ImageGallery> */}
-        {this.state.loading && <ThreeDots color="#00BFFF" height={80} width={80} />}
-        <ImageGallery imageName={this.state.imageName}></ImageGallery>
-        {this.state.showBtn && <Button onClick={this.increasePage} />}
-        {/* {this.state.image && <div>{'React homework template'}</div>} */}
-            </Container>
+          <SearchBar onSubmit={this.onSubmitHandler} onValidation = {this.showValidationMessage}/>
+          <ImageGallery data={data} onClick={this.openImageModal}  />
+          {loading && <Loader />}  
+          {showBtn && <Button onClick={this.increasePage} />}
+          {isModalOpen && <Modal image={urlForModalPicture} onClick={this.closeImageModal}/>}
+        </Container>
     );
   }
  
@@ -83,3 +97,11 @@ export default App;
 // page -1
 // perpage-12
 // cardImages={}
+    // query:{
+    //   q:null,
+    //   page:1,
+    //   perpage:12,
+    //   id:1,
+    //   webformatURL: null,
+    //   largeImageURL: null
+    // }, 

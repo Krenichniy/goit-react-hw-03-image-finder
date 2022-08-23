@@ -1,16 +1,17 @@
 import PropTypes from 'prop-types';
 import { StyledGalleryItem, StyledImage } from './ImageGalleryItem.styled';
 
-const ImageGalleryItem= ({cards, onClick})=> {
-    return cards.map((element, id) => {
-        return  <StyledGalleryItem key = {element.id}>
-                    <StyledImage src= {element.webformatURL}  alt={element.tags} data-id= {id} onclick={onClick} loading="lazy" />
-            </StyledGalleryItem>
-    })
+const ImageGalleryItem = ({ card, onClick }) => {
+        const { id, largeImageURL, webformatURL, tags } = card;
+        return(
+                <StyledGalleryItem key={id} onClick={()=> onClick(largeImageURL)}>
+                        <StyledImage src= {webformatURL}  alt={tags}  loading="lazy" />
+                </StyledGalleryItem>
+        )
 }
 
 ImageGalleryItem.protoType = {
-    card: PropTypes.array.isRequired, 
+    card: PropTypes.object.isRequired, 
     onClick: PropTypes.func.isRequired, 
 }
 export default ImageGalleryItem;

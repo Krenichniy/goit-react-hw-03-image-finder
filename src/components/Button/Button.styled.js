@@ -2,6 +2,7 @@ const { default: styled } = require('styled-components');
 
 export const ButtonStyled = styled.button`
         display: block;
+        margin-top: 50px;
         margin-left: auto;
         margin-right: auto;
         cursor: pointer;
