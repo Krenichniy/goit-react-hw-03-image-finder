@@ -60,7 +60,7 @@ class App extends Component {
     this.setState({ pageNumber: this.state.pageNumber + 1, loading:true});
     const response = await FetchImagesFromApi(pageNumber + 1, imageName);
     this.setState({ data: [...this.state.data, ...response.hits], showBtn: this.state.pageNumber < Math.ceil(response.total / 12) });
-    console.log(this.state.data)
+    
   }
 
   openImageModal=(image)=> {

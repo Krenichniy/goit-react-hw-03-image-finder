@@ -8,6 +8,7 @@ export const StyledGalleryItem = styled.li`
         border-radius: 4px;
         transition: transform 250ms linear;
         z-index: 1;
+        cursor:pointer;
 
         &:hover{
             box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 1px rgb(0 0 0 / 14%), 0 2px 1px rgb(0 0 0 / 20%);
