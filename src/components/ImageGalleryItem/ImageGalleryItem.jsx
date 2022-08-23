@@ -15,3 +15,5 @@ ImageGalleryItem.protoType = {
     onClick: PropTypes.func.isRequired, 
 }
 export default ImageGalleryItem;
+
+//test
